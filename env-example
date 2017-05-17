@@ -16,7 +16,7 @@ DATA_SAVE_PATH=../data
 # Applies to the Workspace and PHP-FPM containers (Does not apply to HHVM)
 # Accepted values: 71 - 70 - 56
 
-PHP_VERSION=70
+PHP_VERSION=56
 
 ### PHP interpreter
 # Accepted values: hhvm - php-fpm
@@ -34,15 +34,16 @@ WORKSPACE_INSTALL_SOAP=false
 WORKSPACE_INSTALL_MONGO=false
 WORKSPACE_INSTALL_NODE=false
 WORKSPACE_INSTALL_YARN=false
-WORKSPACE_INSTALL_DRUSH=false
-WORKSPACE_INSTALL_AEROSPIKE_EXTENSION=false
-WORKSPACE_INSTALL_INSTALL_V8JS_EXTENSION=false
-WORKSPACE_COMPOSER_GLOBAL_INSTALL=false
-WORKSPACE_INSTALL_WORKSPACE_SSH=false
+WORKSPACE_INSTALL_DRUSH=false                                                                                                                        
+WORKSPACE_INSTALL_AEROSPIKE_EXTENSION=false                                                                                                          
+WORKSPACE_INSTALL_INSTALL_V8JS_EXTENSION=false                                                                                                       
+WORKSPACE_COMPOSER_GLOBAL_INSTALL=false                                                                                                              
+WORKSPACE_INSTALL_WORKSPACE_SSH=false                                                                                                                
 WORKSPACE_INSTALL_LARAVEL_ENVOY=false
 WORKSPACE_INSTALL_DEPLOYER=false
 WORKSPACE_INSTALL_LINUXBREW=false
 WORKSPACE_INSTALL_MC=false
+WORKSPACE_INSTALL_ORACLE=true
 WORKSPACE_PUID=1000
 WORKSPACE_PGID=1000
 WORKSPACE_NODE_VERSION=stable
@@ -52,9 +53,9 @@ WORKSPACE_SSH_PORT=2222
 
 ### PHP_FPM Container ##################################################################################################
 
-PHP_FPM_INSTALL_XDEBUG=false
+PHP_FPM_INSTALL_XDEBUG=true
 PHP_FPM_INSTALL_MONGO=false
-PHP_FPM_INSTALL_SOAP=false
+PHP_FPM_INSTALL_SOAP=true
 PHP_FPM_INSTALL_ZIP_ARCHIVE=false
 PHP_FPM_INSTALL_BCMATH=false
 PHP_FPM_INSTALL_PHPREDIS=false
@@ -62,11 +63,11 @@ PHP_FPM_INSTALL_MEMCACHED=false
 PHP_FPM_INSTALL_OPCACHE=false
 PHP_FPM_INSTALL_EXIF=false
 PHP_FPM_INSTALL_AEROSPIKE_EXTENSION=false
-PHP_FPM_INSTALL_MYSQLI=false
+PHP_FPM_INSTALL_MYSQLI=true
 PHP_FPM_INSTALL_TOKENIZER=false
 PHP_FPM_INSTALL_INTL=false
 PHP_FPM_INSTALL_GHOSTSCRIPT=false
-
+PHP_FPM_INSTALL_ORACLE=true
 ### NGINX Container ####################################################################################################
 
 NGINX_HOST_HTTP_PORT=80
@@ -226,15 +227,14 @@ JENKINS_HOME=./jenkins/jenkins_home
 
 # Replace with your Docker Host IP (will be appended to /etc/hosts)
 
-DOCKER_HOST_IP=10.0.75.1
+DOCKER_HOST_IP=172.17.0.1
 
 
 # The Remote Interpreter entry matching name `laradock`
 
-PHP_IDE_CONFIG=serverName=laradock
+PHP_IDE_CONFIG=serverName=mec-poc-sso.dev
 
 
 # Fix for windows users to make sure the application path works.
 
 COMPOSE_CONVERT_WINDOWS_PATHS=1
-
