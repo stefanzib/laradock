@@ -73,6 +73,10 @@ services:
           - INSTALL_INTL=${PHP_FPM_INSTALL_INTL}
           - INSTALL_GHOSTSCRIPT=${PHP_FPM_INSTALL_GHOSTSCRIPT}
           - INSTALL_LDAP=${PHP_FPM_INSTALL_LDAP}
+          - INSTALL_XSL=${PHP_FPM_INSTALL_XSL}
+          - INSTALL_SVN=${PHP_FPM_INSTALL_SVN}
+          - INSTALL_ORACLE=${PHP_FPM_INSTALL_ORACLE}
+
         dockerfile: "Dockerfile-${PHP_VERSION}"
       volumes_from:
         - applications
@@ -83,8 +87,14 @@ services:
       depends_on:
         - workspace
       extra_hosts:
+        - "svn.mec.gov.br:10.38.0.162"
+        - "composerexterno.mec.gov.br:10.38.0.130"
+        - "composer.mec.gov.br:10.38.0.130"
         - "dockerhost:${DOCKER_HOST_IP}"
+        - "cast-laravel.dev:${DOCKER_HOST_IP}"
         - "cau-corporativo.dev:${DOCKER_HOST_IP}"
+        - "dsv-idp.mec.gov.br:10.37.0.174"
+        - "archetype-lumen-php.dev:${DOCKER_HOST_IP}"
         - "commission-api.dev:${DOCKER_HOST_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}

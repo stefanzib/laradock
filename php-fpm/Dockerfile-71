@@ -37,6 +37,20 @@ MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 #
 
 #####################################
+# COMPOSER:
+#####################################
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
+# Get repository and install wget and vim
+RUN apt-get update && apt-get install --no-install-recommends -y \
+        wget \
+        vim \
+        git \
+        unzip
+
+RUN apt-get update && apt-get install libaio1 libaio-dev
+
+#####################################
 # SOAP:
 #####################################
 
@@ -228,6 +242,28 @@ RUN if [ ${INSTALL_GHOSTSCRIPT} = true ]; then \
     poppler-utils \
     ghostscript \
 ;fi
+
+# Install Oracle Instantclient
+
+COPY ./instantclient-basic-linux.x64-12.2.0.1.0.zip /tmp
+COPY ./instantclient-sdk-linux.x64-12.2.0.1.0.zip /tmp
+RUN mkdir /opt/oracle \
+    && cd /opt/oracle \
+    && unzip /tmp/instantclient-basic-linux.x64-12.2.0.1.0.zip -d /opt/oracle \
+    && unzip /tmp/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle \
+    && ln -s /opt/oracle/instantclient_12_2/libclntsh.so.12.1 /opt/oracle/instantclient_12_2/libclntsh.so \
+    && ln -s /opt/oracle/instantclient_12_2/libclntshcore.so.12.1 /opt/oracle/instantclient_12_2/libclntshcore.so \
+    && ln -s /opt/oracle/instantclient_12_2/libocci.so.12.1 /opt/oracle/instantclient_12_2/libocci.so \
+    && rm -rf /opt/oracle/*.zip \
+    && echo 'instantclient,/opt/oracle/instantclient_12_2/' | pecl install oci8 \
+    && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_12_2,12.1 \
+    && docker-php-ext-install pdo_oci \
+    && docker-php-ext-enable oci8
+
+#####################################
+# GIT
+#####################################
+RUN apt-get update && apt-get install -y git
 
 #
 #--------------------------------------------------------------------------

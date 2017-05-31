@@ -15,6 +15,8 @@ FROM laradock/workspace:1.6
 
 MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 
+
+
 #
 #--------------------------------------------------------------------------
 # Mandatory Software's Installation
@@ -277,3 +279,4 @@ RUN apt-get clean && \
 
 # Set default work directory
 WORKDIR /var/www
+

@@ -48,6 +48,12 @@ RUN if [ ${INSTALL_SOAP} = true ]; then \
     docker-php-ext-install soap \
 ;fi
 
+# Get repository and install wget and vim
+RUN apt-get update && apt-get install --no-install-recommends -y \
+        wget \
+        vim \
+        git
+
 #####################################
 # xDebug:
 #####################################
@@ -106,9 +112,12 @@ RUN if [ ${INSTALL_MONGO} = true ]; then \
 #####################################
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
+
 #####################################
 # ORACLE:
 #####################################
+ARG INSTALL_ORACLE=false
+RUN if [ ${INSTALL_ORACLE} = true ]; then \
     COPY ./instantclient-basic-linux.x64-12.2.0.1.0.zip /tmp
     COPY ./instantclient-sdk-linux.x64-12.2.0.1.0.zip /tmp
     COPY ./instantclient-sqlplus-linux.x64-12.2.0.1.0.zip /tmp
@@ -135,6 +144,8 @@ ENV ORACLE_HOME /usr/local/instantclient/
 #    && docker-php-ext-configure oci8 --with-oci8=instantclient,/home/oracle \
 #    && docker-php-ext-install oci8
 
+;fi
+
 
 
 #####################################
@@ -146,6 +157,21 @@ RUN if [ ${INSTALL_ZIP_ARCHIVE} = true ]; then \
     # Install the zip extension
     docker-php-ext-install zip \
 ;fi
+
+ARG INSTALL_XSL=false
+RUN if [ ${INSTALL_XSL} = true ]; then \
+    # Install the xsl extension
+apt-get update \
+	&& apt-get install -y \
+	libxml2-dev \
+	libxslt-dev \
+	&& docker-php-ext-install \
+		dom \
+		xmlrpc \
+		xsl \
+;fi
+
+
 
 #####################################
 # bcmath:
@@ -232,6 +258,11 @@ RUN if [ ${INSTALL_MYSQLI} = true ]; then \
 ARG INSTALL_TOKENIZER=false
 RUN if [ ${INSTALL_TOKENIZER} = true ]; then \
     docker-php-ext-install tokenizer \
+;fi
+
+ARG INSTALL_SVN=false
+RUN if [ ${INSTALL_SVN} = true ]; then \
+    apt-get install -y subversion \
 ;fi
 
 #####################################
