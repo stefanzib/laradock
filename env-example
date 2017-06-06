@@ -4,8 +4,9 @@
 
 ### Application Path
 # Point to your application code, will be available at `/var/www`.
-
-APPLICATION=../
+# windows APPLICATION=/c/www
+# linux APPLICATION=../
+APPLICATION=/c/www
 
 ### Data Path:
 # For all storage systems.
