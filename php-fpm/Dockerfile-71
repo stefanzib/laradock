@@ -62,6 +62,61 @@ RUN if [ ${INSTALL_SOAP} = true ]; then \
     docker-php-ext-install soap \
 ;fi
 
+ARG INSTALL_XSL=false
+RUN if [ ${INSTALL_XSL} = true ]; then \
+    # Install the xsl extension
+apt-get update \
+	&& apt-get install -y \
+	libxml2-dev \
+	libxslt-dev \
+	&& docker-php-ext-install \
+		dom \
+		xmlrpc \
+		xsl \
+;fi
+
+#####################################
+# LDAP:
+#####################################
+
+ARG INSTALL_LDAP=false
+RUN if [ ${INSTALL_LDAP} = true ]; then \
+    apt-get update -yqq && \
+    apt-get install -y libldap2-dev && \
+    docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
+    docker-php-ext-install ldap \
+;fi
+
+#####################################
+# SQL SERVER:
+#####################################
+
+ARG INSTALL_MSSQL=false
+ENV INSTALL_MSSQL ${INSTALL_MSSQL}
+RUN if [ ${INSTALL_MSSQL} = true ]; then \
+    #####################################
+    # Ref from https://github.com/Microsoft/msphpsql/wiki/Dockerfile-for-adding-pdo_sqlsrv-and-sqlsrv-to-official-php-image
+    #####################################
+    # Add Microsoft repo for Microsoft ODBC Driver 13 for Linux
+    apt-get update -yqq && apt-get install -y apt-transport-https \
+        && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+        && curl https://packages.microsoft.com/config/debian/8/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+        && apt-get update -yqq \
+
+    # Install Dependencies
+        && ACCEPT_EULA=Y apt-get install -y unixodbc unixodbc-dev libgss3 odbcinst msodbcsql locales \
+        && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen \
+
+    # Install pdo_sqlsrv and sqlsrv from PECL. Replace pdo_sqlsrv-4.1.8preview with preferred version.
+        && pecl install pdo_sqlsrv-4.1.8preview sqlsrv-4.1.8preview \
+        && docker-php-ext-enable pdo_sqlsrv sqlsrv \
+;fi
+
+ARG INSTALL_SVN=false
+RUN if [ ${INSTALL_SVN} = true ]; then \
+    apt-get install -y subversion \
+;fi
+
 #####################################
 # xDebug:
 #####################################
@@ -243,7 +298,11 @@ RUN if [ ${INSTALL_GHOSTSCRIPT} = true ]; then \
     ghostscript \
 ;fi
 
-# Install Oracle Instantclient
+#####################################
+# ORACLE:
+#####################################
+ARG INSTALL_ORACLE=false
+RUN if [ ${INSTALL_ORACLE} = true ]; then \
 
 COPY ./instantclient-basic-linux.x64-12.2.0.1.0.zip /tmp
 COPY ./instantclient-sdk-linux.x64-12.2.0.1.0.zip /tmp
@@ -260,6 +319,7 @@ RUN mkdir /opt/oracle \
     && docker-php-ext-install pdo_oci \
     && docker-php-ext-enable oci8
 
+;fi
 #####################################
 # GIT
 #####################################
