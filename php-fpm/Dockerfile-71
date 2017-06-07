@@ -301,25 +301,24 @@ RUN if [ ${INSTALL_GHOSTSCRIPT} = true ]; then \
 #####################################
 # ORACLE:
 #####################################
-ARG INSTALL_ORACLE=false
-RUN if [ ${INSTALL_ORACLE} = true ]; then \
-
 COPY ./instantclient-basic-linux.x64-12.2.0.1.0.zip /tmp
 COPY ./instantclient-sdk-linux.x64-12.2.0.1.0.zip /tmp
-RUN mkdir /opt/oracle \
-    && cd /opt/oracle \
-    && unzip /tmp/instantclient-basic-linux.x64-12.2.0.1.0.zip -d /opt/oracle \
-    && unzip /tmp/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle \
-    && ln -s /opt/oracle/instantclient_12_2/libclntsh.so.12.1 /opt/oracle/instantclient_12_2/libclntsh.so \
-    && ln -s /opt/oracle/instantclient_12_2/libclntshcore.so.12.1 /opt/oracle/instantclient_12_2/libclntshcore.so \
-    && ln -s /opt/oracle/instantclient_12_2/libocci.so.12.1 /opt/oracle/instantclient_12_2/libocci.so \
-    && rm -rf /opt/oracle/*.zip \
-    && echo 'instantclient,/opt/oracle/instantclient_12_2/' | pecl install oci8 \
-    && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_12_2,12.1 \
-    && docker-php-ext-install pdo_oci \
-    && docker-php-ext-enable oci8
-
+ARG INSTALL_ORACLE=false
+RUN if [ ${INSTALL_ORACLE} = true ]; then \
+     mkdir /opt/oracle  \
+     && cd /opt/oracle && \
+     unzip /tmp/instantclient-basic-linux.x64-12.2.0.1.0.zip -d /opt/oracle && \
+     unzip /tmp/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /opt/oracle && \
+     ln -s /opt/oracle/instantclient_12_2/libclntsh.so.12.1 /opt/oracle/instantclient_12_2/libclntsh.so && \
+     ln -s /opt/oracle/instantclient_12_2/libclntshcore.so.12.1 /opt/oracle/instantclient_12_2/libclntshcore.so && \
+     ln -s /opt/oracle/instantclient_12_2/libocci.so.12.1 /opt/oracle/instantclient_12_2/libocci.so && \
+     rm -rf /opt/oracle/*.zip && \
+     echo 'instantclient,/opt/oracle/instantclient_12_2/' | pecl install oci8 && \
+     docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_12_2,12.1 && \
+     docker-php-ext-install pdo_oci && \
+     docker-php-ext-enable oci8 \
 ;fi
+
 #####################################
 # GIT
 #####################################
