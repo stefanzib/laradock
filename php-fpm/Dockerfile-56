@@ -116,14 +116,15 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 #####################################
 # ORACLE:
 #####################################
-ARG INSTALL_ORACLE=false
-RUN if [ ${INSTALL_ORACLE} = true ]; then \
     COPY ./instantclient-basic-linux.x64-12.2.0.1.0.zip /tmp
     COPY ./instantclient-sdk-linux.x64-12.2.0.1.0.zip /tmp
     COPY ./instantclient-sqlplus-linux.x64-12.2.0.1.0.zip /tmp
     COPY ./oci8.ini /usr/local/etc/php/conf.d/oci8.ini
+ARG INSTALL_ORACLE=false
+RUN if [ ${INSTALL_ORACLE} = true ]; then \
+
     
-    RUN apt-get install zip unzip \
+    apt-get install zip unzip \
     && apt-get install -y libaio-dev \
     && unzip /tmp/instantclient-basic-linux.x64-12.2.0.1.0.zip -d /usr/local \
     && unzip /tmp/instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /usr/local \
@@ -136,17 +137,22 @@ RUN if [ ${INSTALL_ORACLE} = true ]; then \
     && ln -s /usr/local/instantclient/libclntshcore.so.12.1 /usr/local/instantclient/libclntshcore.so \
     && ln -s /usr/local/instantclient/libocci.so.12.1 /usr/local/instantclient/libocci.so \
     && echo 'instantclient,/usr/local/instantclient' | pecl install oci8-2.0.12 \
-    && rm -rf /tmp/instantclient-*.zip
-ENV ORACLE_HOME /usr/local/instantclient/
-    
-#RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-#    && docker-php-ext-install gd \
-#    && docker-php-ext-configure oci8 --with-oci8=instantclient,/home/oracle \
-#    && docker-php-ext-install oci8
+    && rm -rf /tmp/instantclient-*.zip \
+ENV ORACLE_HOME /usr/local/instantclient/ \
 
 ;fi
 
+#####################################
+# SQL SERVER:
+#####################################
+ARG INSTALL_MSSQL=false
+ENV INSTALL_MSSQL ${INSTALL_MSSQL}
 
+RUN if [ ${INSTALL_MSSQL} = true ]; then \
+    apt-get -y install php5-sybase freetds-bin && \
+    cp /usr/lib/php5/20131226/*.so /usr/local/lib/php/extensions/no-debug-non-zts-20131226/ && \
+    docker-php-ext-enable mssql pdo pdo_dblib \
+;fi
 
 #####################################
 # ZipArchive:
