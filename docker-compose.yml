@@ -15,12 +15,12 @@ services:
       build:
         context: ./workspace
         args:
+          - INSTALL_NODE=${WORKSPACE_INSTALL_NODE}
           - INSTALL_XDEBUG=${WORKSPACE_INSTALL_XDEBUG}
           - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
           - INSTALL_SOAP=${WORKSPACE_INSTALL_SOAP}
           - INSTALL_MONGO=${WORKSPACE_INSTALL_MONGO}
           - INSTALL_MSSQL=${WORKSPACE_INSTALL_MSSQL}
-          - INSTALL_NODE=${WORKSPACE_INSTALL_NODE}
           - INSTALL_YARN=${WORKSPACE_INSTALL_YARN}
           - INSTALL_DRUSH=${WORKSPACE_INSTALL_DRUSH}
           - INSTALL_AEROSPIKE_EXTENSION=${WORKSPACE_INSTALL_AEROSPIKE_EXTENSION}
@@ -84,6 +84,7 @@ services:
         - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
       expose:
         - "9000"
+        - "4200"
       depends_on:
         - workspace
       extra_hosts:
@@ -128,7 +129,7 @@ services:
         - ${NGINX_SITES_PATH}:/etc/nginx/sites-available
       ports:
         - "${NGINX_HOST_HTTP_PORT}:8080"
-        #- "${NGINX_HOST_HTTPS_PORT}:443"
+        - "${NGINX_HOST_HTTPS_PORT}:4443"
       depends_on:
         - php-fpm
       networks:
