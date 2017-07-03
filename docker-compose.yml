@@ -41,10 +41,14 @@ services:
         dockerfile: "Dockerfile-${PHP_VERSION}"
       volumes_from:
         - applications
+      expose:
+        - "4200"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
+        - "192.168.99.100:127.0.0.1"
       ports:
         - "${WORKSPACE_SSH_PORT}:22"
+        - "4200:4200"
       tty: true
       networks:
         - frontend
