@@ -41,6 +41,16 @@ MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 #   - ...
 #
 
+# Install Python.
+
+ARG INSTALL_PYTHON=false
+
+RUN if [ ${INSTALL_PYTHON} = true ]; then \
+  apt-get update && \
+  apt-get install -y python python-dev python-pip python-virtualenv && \
+  rm -rf /var/lib/apt/lists/* \
+;fi
+
 #####################################
 # Non-Root User:
 #####################################
