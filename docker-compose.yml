@@ -64,6 +64,27 @@ services:
       environment:
         - KEYCLOAK_USER=admin
         - KEYCLOAK_PASSWORD=admin
+
+### Artifactory Container ###################################
+    artifactory:
+      image: docker.bintray.io/jfrog/artifactory-oss:latest
+      ports:
+        - 8081:8081
+
+### Nexus Container #########################################
+    nexus:
+      image: sonatype/nexus
+      ports:
+        - 8081:8081
+
+### Gitlab Container #########################################
+    gitlab:
+      image: gitlab/gitlab-ce:latest
+      ports:
+        - 81:80
+        - 444:443
+        - 29:22
+
 ### PHP-FPM Container #######################################
 
     php-fpm:
@@ -102,6 +123,8 @@ services:
       depends_on:
         - workspace
       extra_hosts:
+        - "satis.dev:${DOCKER_HOST_IP}"
+        - "lumen.dev:${DOCKER_HOST_IP}"
         - "svn.mec.gov.br:10.38.0.162"
         - "composerexterno.mec.gov.br:10.38.0.130"
         - "composer.mec.gov.br:10.38.0.130"

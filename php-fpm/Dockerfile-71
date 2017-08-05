@@ -161,14 +161,14 @@ RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
 #####################################
 # MongoDB:
 #####################################
-
+COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 ARG INSTALL_MONGO=false
+ENV INSTALL_MONGO ${INSTALL_MONGO}
 RUN if [ ${INSTALL_MONGO} = true ]; then \
     # Install the mongodb extension
-    pecl install mongodb && \
-    docker-php-ext-enable mongodb \
+    pecl install mongodb \
 ;fi
-
+COPY ./mongo.ini /usr/local/etc/php/conf.d/mongo.ini
 #####################################
 # ZipArchive:
 #####################################
