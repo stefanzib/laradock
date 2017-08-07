@@ -56,13 +56,10 @@ RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins/ref
 # Add jenkins to the correct group
 # see http://stackoverflow.com/questions/42164653/docker-in-docker-permissions-error
 # use "getent group docker | awk -F: '{printf "%d\n", $3}'" command on host to find correct value for gid or simply use 'id'
-ARG DOCKER_GID=998
+ARG DOCKER_GID=id
 
-RUN groupadd -g ${DOCKER_GID} docker \
-  && curl -sSL https://get.docker.com/ | sh \
-  && apt-get -q autoremove \
-  && apt-get -q clean -y \
-  && rm -rf /var/lib/apt/lists/* /var/cache/apt/*.bin
+
+
 
 # Install Docker-in-Docker from git@github.com:jpetazzo/dind.git
 # RUN apt-get update -qq && apt-get install -qqy apt-transport-https ca-certificates curl lxc iptables
