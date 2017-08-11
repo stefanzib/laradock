@@ -103,6 +103,15 @@ services:
       networks:
         - frontend
 
+### Sonar Container #########################################
+    sonar:
+      image: sonarqube
+      ports:
+        - 9001:9000
+        - 9092:9092
+      networks:
+        - frontend
+
 ### PHP-FPM Container #######################################
 
     php-fpm:
@@ -141,6 +150,7 @@ services:
       depends_on:
         - workspace
       extra_hosts:
+        - "mdic.dev:${DOCKER_HOST_IP}"
         - "satis.dev:${DOCKER_HOST_IP}"
         - "lumen.dev:${DOCKER_HOST_IP}"
         - "svn.mec.gov.br:10.38.0.162"
