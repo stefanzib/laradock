@@ -92,6 +92,10 @@ services:
         - 81:80
         - 444:443
         - 29:22
+      volumes:
+        - /var/www/data/gitlab/config:/etc/gitlab
+        - /var/www/data/gitlab/logs:/var/log/gitlab
+        - /var/www/data/gitlab/data:/var/opt/gitlab
       networks:
         - frontend
 ### Jenkins Container #########################################
@@ -102,6 +106,8 @@ services:
         - 50000:50000
       networks:
         - frontend
+      volumes:
+        - /var/www/data/jenkins:/var/jenkins_home
 
 ### Sonar Container #########################################
     sonar:
@@ -111,7 +117,8 @@ services:
         - 9092:9092
       networks:
         - frontend
-
+      volumes:
+        - /var/www/data/sonarqube/data:/opt/sonarqube/data
 ### PHP-FPM Container #######################################
 
     php-fpm:
