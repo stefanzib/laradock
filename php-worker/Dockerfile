@@ -19,7 +19,7 @@ MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 # Modify the ./supervisor.conf file to match your App's requirements.
 # Make sure you rebuild your container with every change.
 #
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY supervisord.conf /etc/supervisord.conf
 
 #
 #--------------------------------------------------------------------------
@@ -37,5 +37,4 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 #--------------------------------------------------------------------------
 #
 
-RUN rm -r /var/lib/apt/lists/*
 WORKDIR /etc/supervisor/conf.d/

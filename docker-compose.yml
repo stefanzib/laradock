@@ -190,6 +190,21 @@ services:
       networks:
         - backend
 
+### PHP Pthread Container #####################################
+
+    php-thread:
+      build:
+        context: ./php-thread
+      volumes_from:
+        - applications
+      tty: true
+      depends_on:
+        - workspace
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+      networks:
+        - backend
+
 ### Nginx Server Container ##################################
 
     nginx:
