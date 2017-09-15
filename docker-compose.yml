@@ -84,7 +84,16 @@ services:
       image: sonatype/nexus
       ports:
         - 8081:8081
-
+### Oracle Container #########################################
+    oracle:
+      image: wnameless/oracle-xe-11g
+      ports:
+        - 28:22
+        - 1521:1521
+      environment:
+        - ORACLE_ALLOW_REMOTE=true
+      networks:
+        - frontend
 ### Gitlab Container #########################################
     gitlab:
       image: gitlab/gitlab-ce:latest
