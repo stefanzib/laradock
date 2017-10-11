@@ -96,17 +96,21 @@ services:
         - frontend
 ### Gitlab Container #########################################
     gitlab:
-      image: gitlab/gitlab-ce:latest
+      build:
+        context: ./gitlab
       ports:
-        - 81:80
+        - 80:80
         - 444:443
         - 29:22
       volumes:
-        - /var/www/data/gitlab/config:/etc/gitlab
-        - /var/www/data/gitlab/logs:/var/log/gitlab
-        - /var/www/data/gitlab/data:/var/opt/gitlab
+        - ${DATA_SAVE_PATH}/gitlab/config:/etc/gitlab
+        - ${DATA_SAVE_PATH}/gitlab/logs:/var/log/gitlab
+        - ${DATA_SAVE_PATH}/gitlab/data:/var/opt/gitlab
+        - /var/run/docker.sock:/var/run/docker.sock
       networks:
         - frontend
+      extra_hosts:
+        - "gitlab.dev:${DOCKER_HOST_IP}"
 ### Jenkins Container #########################################
     jenkins:
       image: jenkins/jenkins:lts
